@@ -1,0 +1,28 @@
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="logins content">
+            <form action="/logins" method="POST">
+                <b>Logins: </b></br> 
+            <% if (theLogins.length > 0) { %>
+                <% theLogins.forEach(login => { %>
+                    <b><%= login.username %></b>
+                    <a href="/logins/<%=login.id%>/edit?username=<%=login.username%>">edit</a>
+                    <a href="/logins/<%=login.id%>/delete?username=<%=login.username%>">delete</a></br> 
+                    <% }) %>
+            <% } %>
+            </br><label>Add Login:</label></br>
+            <label>Username:
+                <input type="text" id="userame" name="username" value="<%= locals.userame %>" required>
+            </label>
+            <label>Password:
+                <input type="password" id="password" name="password" value="<%= locals.password %>" required>
+            </label>
+            </br>
+            <button>POST</button>
+        </form>
+        </div>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+</html>

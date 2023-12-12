@@ -1,0 +1,15 @@
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="login content">
+            <h2>Login:</h2>
+            <% if (aLogin.length > 0) 
+                var login = aLogin[0];{ %>
+                <h3><%= login.username %> <%= login.password %>
+                </h3> 
+            <% } %>
+        </div>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+</html>

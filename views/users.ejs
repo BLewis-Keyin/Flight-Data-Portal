@@ -1,0 +1,29 @@
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="users content">
+            <form action="/users" method="POST">
+                <b>Users: </b></br> 
+            <% if (theUsers.length > 0) { %>
+                <% theUsers.forEach(user => { %>
+                    <b><%= user.first_name %> <%= user.last_name %></b>
+                    <a href="/users/<%=user.user_id%>/edit?first_name=<%=user.first_name%>&last_name=<%=user.last_name%>">edit</a>
+                    <a href="/users/<%=user.user_id%>/delete?first_name=<%=user.first_name%>&last_name=<%=user.last_name%>">delete</a>
+                    <a href="/users/<%=user.user_id%>/replace?first_name=<%=user.first_name%>&last_name=<%=user.last_name%>">replace</a></br> 
+                    <% }) %>
+            <% } %>
+            </br><label>Add User:</label></br>
+            <label>First Name:
+                <input type="text" id="first_name" name="first_name" value="<%= locals.first_name %>" required>
+            </label>
+            <label>Last Name:
+                <input type="text" id="last_name" name="last_name" value="<%= locals.last_name %>" required>
+            </label>
+            </br>
+            <button>POST</button>
+        </form>
+        </div>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+</html>

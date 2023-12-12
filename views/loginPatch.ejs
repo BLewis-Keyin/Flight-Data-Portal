@@ -1,0 +1,16 @@
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="edit content">
+            <form action="/logins/<%= locals.theId %>?_method=PATCH" method="POST">
+                <label>Edit Login Fields:</br>
+                    <input type="text" name="username" value="<%= locals.username %>" required>
+                    <input type="text" name="password" value="<%= locals.password %>" required>
+                </label></br>
+                <button>PATCH</button>
+            </form>
+        </div>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+</html>

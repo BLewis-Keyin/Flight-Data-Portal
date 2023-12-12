@@ -1,0 +1,13 @@
+curl -d "firstName=Bilbo&lastName=Baggins" -X POST http://localhost:3000/api/actors
+
+curl -d "firstName=Steve&lastName=Rogers" -X PUT http://localhost:3000/api/actors/999
+
+curl -d "firstName=Frodo&lastName=Baggins" -X PATCH http://localhost:3000/api/actors/64be566df2e7599478eeae50
+
+curl -X GET http://localhost:3000/api/actors/
+
+curl -X DELETE http://localhost:3000/api/actors/999
+
+http://localhost:3000/api/actors?firstName=Bilbo&lastName=Baggins
+
+curl -d "userame=bokatan&password=mando" -X PATCH http://localhost:3000/api/logins
