@@ -1,0 +1,34 @@
+<!-- flight.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Details</title>
+</head>
+
+<body>
+    <h1>Flight Details</h1>
+
+    <% if (flight) { %>
+        <ul>
+            <li><strong>Flight Number:</strong>
+                <%= flight.flight_no %>
+            </li>
+            <li><strong>Destination:</strong>
+                <%= flight.arrival_airport %>
+            </li>
+            <li><strong>Departure Time:</strong>
+                <%= flight.scheduled_departure %>
+            </li>
+        </ul>
+        <% } else { %>
+            <p>No flight details available.</p>
+            <% } %>
+
+                <a href="/flights">Back to Flights</a>
+</body>
+
+</html>
