@@ -11,7 +11,10 @@
 
 <body>
     <h1>Flight Details</h1>
-
+    <form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search flights">
+        <button type="submit">Search</button>
+      </form>
     <% if (flight) { %>
         <ul>
             <li><strong>Flight Number:</strong>
