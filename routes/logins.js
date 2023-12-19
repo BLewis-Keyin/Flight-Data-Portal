@@ -45,7 +45,7 @@ router.get('/:id/edit', async(req, res) => {
 router.post('/', async(req, res) => {
     if (DEBUG) console.log("logins.POST");
     try {
-        await loginsDal.addLogin(req.body.username, req.body.password);
+        await loginsDal.addLogin(req.body.username, req.body.password, req.body.first_name, req.body.last_name, req.body.email);
         res.redirect('/logins/');
     } catch {
         // log this error to an error log file.

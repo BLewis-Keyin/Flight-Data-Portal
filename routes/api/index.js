@@ -14,12 +14,5 @@ router.use('/actors', flightsRouter);
 const loginsRouter = require('./logins')
 router.use('/logins', loginsRouter);
 
-// http://localhost:3000/api/full/
-const fulltextRouter = require('./fulltext')
-router.use('/full', fulltextRouter);
-
-// http://localhost:3000/api/users/
-const usersRouter = require('./users')
-router.use('/users', usersRouter);
 
 module.exports = router;

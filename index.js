@@ -22,8 +22,6 @@ app.use('/flights', flightsRouter);
 const loginsRouter = require('./routes/logins')
 app.use('/logins', loginsRouter);
 
-const usersRouter = require('./routes/users')
-app.use('/users', usersRouter);
 
 // anything beginning with "/api" will go into this
 const apiRouter = require('./routes/api')
