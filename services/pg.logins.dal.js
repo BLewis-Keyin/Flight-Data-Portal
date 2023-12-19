@@ -130,6 +130,8 @@ var getLoginByUsername = function(username) {
         });
     });
 };
+
+
 module.exports = {
     getLogins,
     getLoginByUsername,

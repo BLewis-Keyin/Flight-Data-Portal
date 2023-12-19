@@ -3,11 +3,12 @@
         color: #ffffff;
         font-family: 'Arial Narrow Bold', sans-serif;
         overflow-x: hidden;
-        margin-top: 80px;
+        margin-top: 68px;
     }
     /*sf*/
     
     nav {
+        z-index: 1;
         margin: auto;
         display: flex;
         position: fixed;
@@ -64,6 +65,38 @@
         width: 200px;
     }
     
+    #footer {
+        background-color: #343535;
+        color: #fff;
+        text-align: center;
+    }
+    
+    #searchContainer {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        z-index: 2;
+        width: 100%;
+        background-color: #1a1a1a;
+        height: 25px;
+        padding-bottom: 2px;
+        padding-top: 10px;
+    }
+    
+    #searchContainer form,
+    #searchContainer h1 {
+        font-size: 16px;
+        display: flex;
+        height: 25px;
+        margin: 2px
+    }
+    
+    #flightsList {
+        position: relative;
+        top: 100px;
+        margin-bottom: 200px;
+    }
+    
     #flightsList li {
         background-color: #2e2e2e;
         border: 1px solid #3498db;
@@ -88,6 +121,20 @@
         background-color: #2980b9;
     }
     
+    #flightDetails {
+        position: fixed;
+        left: 25%;
+        top: 166px;
+        background-color: #2e2e2e;
+        border: 1px solid #3498db;
+        min-width: 400px;
+        max-width: 1200px;
+        height: 400px;
+        margin-left: 5%;
+        margin: 10px;
+        padding: 10px;
+    }
+    
     h2,
     h3 {
         color: #3498db;
@@ -101,7 +148,6 @@
     button {
         background-color: #3498db;
         color: #000000;
-        padding: 10px 15px;
         border: none;
         border-radius: 5px;
         cursor: pointer;

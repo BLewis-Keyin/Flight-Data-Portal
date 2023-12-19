@@ -1,0 +1,22 @@
+<!-- search-results.ejs -->
+<%- include('./partials/head.ejs') %>
+    <%- include('./partials/nav.ejs') %>
+
+        <body>
+            <h1>Search Results for "
+                <%= query %>"</h1>
+            <ul id="searchResults">
+                <% results.forEach(result => { %>
+                    <li>
+                        <!-- Display relevant information about the search results -->
+                        <strong>Flight Number:</strong>
+                        <%= result.flight_no %><br>
+                            <strong>Destination:</strong>
+                            <%= result.arrival_airport %><br>
+                                <strong>Departure Time:</strong>
+                                <%= result.scheduled_departure %><br>
+                    </li>
+                    <% }); %>
+            </ul>
+        </body>
+        <%- include('./partials/foot.ejs') %>

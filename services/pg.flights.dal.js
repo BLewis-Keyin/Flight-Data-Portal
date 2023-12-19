@@ -42,8 +42,23 @@ const getFlightsByStatus = function(flightStatus) {
     });
 };
 
+const searchFlights = function(query) {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM flights WHERE flight_no ILIKE $1 OR arrival_airport ILIKE $1 OR status ILIKE $1";
+        dal.query(sql, [`%${query}%`], (err, result) => {
+            if (err) {
+                console.error(err);
+                reject({ error: "Database query failed", details: err });
+            } else {
+                resolve(result.rows);
+            }
+        });
+    });
+};
+
 
 module.exports = {
+    searchFlights,
     getFlights,
     getFlightById,
     getFlightsByStatus,

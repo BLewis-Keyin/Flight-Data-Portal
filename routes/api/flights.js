@@ -3,6 +3,8 @@ const flightsDal = require('../../services/pg.flights.dal');
 
 const DEBUG = true;
 // GET /api/flights
+
+
 router.get('/', async(req, res) => {
     if (DEBUG) console.log('ROUTE: /api/flights/GET ' + req.url);
     try {
@@ -14,6 +16,15 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.get('/search', async(req, res) => {
+    try {
+        const query = req.query.query;
+        const results = await flightsDal.searchFlights(query);
+        res.status(200).json(results);
+    } catch {
+        res.render('503');
+    }
+});
 // GET /api/flights/:id
 router.get('/:id', async(req, res) => {
     if (DEBUG) console.log('ROUTE: /api/flights/:id GET ' + req.url);
@@ -37,7 +48,6 @@ router.post('/', async(req, res) => {
         console.log('ROUTE: /api/flights/ POST');
     }
     try {
-        // Adjust the parameters based on your actual data structure
         await flightsDal.addFlight(req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.statusCode = 201;
         res.json({ message: "Created", status: 201 });
@@ -51,7 +61,6 @@ router.post('/', async(req, res) => {
 router.put('/:id', async(req, res) => {
     if (DEBUG) console.log('ROUTE: /api/flights PUT ' + req.params.id);
     try {
-        // Adjust the parameters based on your actual data structure
         await flightsDal.putFlight(req.params.id, req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.statusCode = 200;
         res.json({ message: "OK", status: 200 });
@@ -65,7 +74,6 @@ router.put('/:id', async(req, res) => {
 router.patch('/:id', async(req, res) => {
     if (DEBUG) console.log('ROUTE: /api/flights PATCH ' + req.params.id);
     try {
-        // Adjust the parameters based on your actual data structure
         await flightsDal.patchFlight(req.params.id, req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.statusCode = 200;
         res.json({ message: "OK", status: 200 });

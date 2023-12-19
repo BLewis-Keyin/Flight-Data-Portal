@@ -14,6 +14,15 @@ router.get('/', async(req, res) => {
         res.render('503');
     }
 });
+router.get('/search', async(req, res) => {
+    try {
+        const query = req.query.query;
+        const results = await flightsDal.searchFlights(query);
+        res.render('flightsSearch', { results, query });
+    } catch {
+        res.render('503');
+    }
+});
 
 router.get('/:id', async(req, res) => {
     try {
@@ -69,5 +78,7 @@ router.delete('/:id', async(req, res) => {
         res.render('503');
     }
 });
+
+
 
 module.exports = router;
