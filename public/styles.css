@@ -4,7 +4,7 @@
         color: #ffffff;
         font-family: 'Arial Narrow Bold', sans-serif;
         padding: 5px;
-        overflow: hidden;
+        overflow-x: hidden;
     }
     
     nav {
@@ -14,7 +14,6 @@
         top: 0px;
         right: 0px;
         width: 100%;
-        overflow: hidden;
         padding: 5px;
     }
     
