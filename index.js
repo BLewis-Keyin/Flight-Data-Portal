@@ -1,17 +1,16 @@
 const express = require('express');
 const methodOverride = require('method-override');
+
 const app = express();
 const session = require('express-session');
 const PORT = 3000;
-
-
 app.use(session({
     secret: 'pgd9LHU4k1Su2ZI9Odpfg8rCe0305sMu',
     resave: false,
     saveUninitialized: true,
 }));
-
 global.DEBUG = false;
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true, })); // This is important!
