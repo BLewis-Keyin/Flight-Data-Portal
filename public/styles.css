@@ -4,22 +4,61 @@
         color: #ffffff;
         font-family: 'Arial Narrow Bold', sans-serif;
         padding: 5px;
-        overflow: hidden;
+        overflow-x: hidden;
     }
     
     nav {
+        display: flex;
+        justify-content: space-between;
         background-color: #343535;
         position: absolute;
         left: 0px;
         top: 0px;
         right: 0px;
         width: 100%;
-        overflow: hidden;
-        padding: 5px;
+        padding: 1px;
     }
     
-    li {
+    nav img {
+        display: flex;
+        float: left;
+        padding: 5px;
+        height: 60px;
+        width: 200px;
+    }
+    
+    nav h1 {
+        display: flex;
+        float: inline-start;
+        padding: 2px;
+        margin-top: 10px;
+        flex-direction: row;
+    }
+    
+    ul {
         list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    nav ul {
+        display: flex;
+        padding: 10px;
+    }
+    
+    nav li {
+        margin: 0;
+    }
+    
+    nav a {
+        text-decoration: none;
+        color: #fff;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+    }
+    
+    nav a:hover {
+        background-color: #555;
     }
     
     #flightsList li {
@@ -30,7 +69,6 @@
         margin: 10px;
         padding: 10px;
         overflow: hidden;
-        /* Add this line to clear the floats */
     }
     
     #flightsList button {

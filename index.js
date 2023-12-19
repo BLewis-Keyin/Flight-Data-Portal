@@ -1,20 +1,24 @@
+global.DEBUG = false;
+
 const express = require('express');
 const methodOverride = require('method-override');
-
-const app = express();
 const session = require('express-session');
+const app = express();
 const PORT = 3000;
+const path = require('path');
+const imagesPath = path.join(__dirname, 'images');
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use('/images', express.static(imagesPath));
+app.use(express.urlencoded({ extended: true, })); // This is important!
+app.use(methodOverride('_method')); // So is this!
 app.use(session({
     secret: 'pgd9LHU4k1Su2ZI9Odpfg8rCe0305sMu',
     resave: false,
     saveUninitialized: true,
 }));
-global.DEBUG = false;
 
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true, })); // This is important!
-app.use(methodOverride('_method')); // So is this!
 
 app.get('/', (req, res) => {
     res.render('index.ejs', { name: 'Cassian Andor' });
