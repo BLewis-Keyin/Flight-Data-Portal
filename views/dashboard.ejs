@@ -1,0 +1,20 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+
+            <div class="dashboard content">
+                <h2>Welcome,
+                    <%= user.username %>!</h2>
+                <p>This is your dashboard.</p>
+            </div>
+
+            <form action="/dashboard/logout" method="GET">
+                <button type="submit">Logout</button>
+            </form>
+
+    </body>
+    <%- include('./partials/foot.ejs') %>
+
+</html>

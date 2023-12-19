@@ -1,15 +1,20 @@
 <html lang="en">
-    <%- include('./partials/head.ejs') %>
+<%- include('./partials/head.ejs') %>
+
     <body>
         <%- include('./partials/nav.ejs') %>
-        <div class="login content">
-            <h2>Login:</h2>
-            <% if (aLogin.length > 0) 
-                var login = aLogin[0];{ %>
-                <h3><%= login.username %> <%= login.password %>
-                </h3> 
-            <% } %>
-        </div>
+            <div class="login content">
+                <form action="/login" method="POST">
+                    <label>Username:
+                <input type="text" id="username" name="username" required>
+            </label>
+                    <label>Password:
+                <input type="password" id="password" name="password" required>
+            </label>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
     </body>
     <%- include('./partials/foot.ejs') %>
+
 </html>

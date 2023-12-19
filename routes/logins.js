@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const loginsDal = require('../services/pg.logins.dal')
+const bcrypt = require('bcrypt');
 DEBUG = true;
 router.get('/', async(req, res) => {
     // const theLogins = [
@@ -72,5 +73,6 @@ router.delete('/:id', async(req, res) => {
         res.render('503');
     }
 });
+
 
 module.exports = router

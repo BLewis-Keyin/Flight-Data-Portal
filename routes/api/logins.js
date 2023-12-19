@@ -1,6 +1,6 @@
 var router = require('express').Router();
 const loginsDal = require('../../services/pg.logins.dal')
-    //const actorsDal = require('../../services/m.actors.dal')
+const bcrypt = require('bcrypt');
 
 // api/logins
 router.get('/', async(req, res) => {
@@ -68,6 +68,33 @@ router.delete('/:id', async(req, res) => {
         // log this error to an error log file.
         res.statusCode = 503;
         res.json({ message: "Service Unavailable", status: 503 });
+    }
+});
+
+
+
+router.post('/login', async(req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await loginsDal.getLoginByUsername(username);
+
+        if (!user || !user.length) {
+            res.status(401).json({ message: 'Invalid username or password' });
+            return;
+        }
+
+        const hashedPassword = user[0].password;
+        bcrypt.compare(password, hashedPassword, (err, result) => {
+            if (err || !result) {
+                res.status(401).json({ message: 'Invalid username or password' });
+            } else {
+                res.status(200).json({ message: 'Login successful' });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 

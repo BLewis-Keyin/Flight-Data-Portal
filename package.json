@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/prawstho/WeekEleven.git"
+        "url": "git+https://github.com/BLewis-Keyin/S3FinalSprint-FSDB.git"
     },
     "keywords": [],
     "author": "Peter Rawsthorne",
@@ -22,6 +22,7 @@
         "bcrypt": "^5.1.1",
         "ejs": "^3.1.8",
         "express": "^4.18.2",
+        "express-session": "^1.17.3",
         "method-override": "^3.0.0",
         "mongodb": "^5.7.0",
         "pg": "^8.8.0"

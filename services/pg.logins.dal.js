@@ -116,9 +116,23 @@ var deleteLogin = function(id) {
         });
     });
 };
-
+var getLoginByUsername = function(username) {
+    if (DEBUG) console.log("logins.pg.dal.getLoginByUsername()");
+    return new Promise(function(resolve, reject) {
+        const sql = `SELECT id, username, password FROM public."Logins" WHERE username = $1`;
+        dal.query(sql, [username], (err, result) => {
+            if (err) {
+                if (DEBUG) console.log(err);
+                reject(err);
+            } else {
+                resolve(result.rows[0]); // Assuming there is only one user with the given username
+            }
+        });
+    });
+};
 module.exports = {
     getLogins,
+    getLoginByUsername,
     getLoginByLoginId,
     addLogin,
     deleteLogin,
