@@ -5,6 +5,7 @@
         font-family: 'Arial Narrow Bold', sans-serif;
         padding: 5px;
         overflow-x: hidden;
+        overflow-x: hidden;
     }
     
     nav {
@@ -16,12 +17,7 @@
         top: 0px;
         right: 0px;
         width: 100%;
-        padding: 1px;
-    }
-    
-    nav img {
-        display: flex;
-        float: left;
+        overflow: hidden;
         padding: 5px;
         height: 60px;
         width: 200px;
