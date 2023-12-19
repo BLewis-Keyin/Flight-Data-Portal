@@ -1,38 +1,27 @@
     body {
-        margin-top: 100px;
         background-color: #1a1a1a;
         color: #ffffff;
         font-family: 'Arial Narrow Bold', sans-serif;
-        padding: 5px;
         overflow-x: hidden;
+        margin-top: 80px;
     }
     
     nav {
+        margin: auto;
         display: flex;
-        justify-content: space-between;
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        justify-content: space-evenly;
         background-color: #343535;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        right: 0px;
-        width: 100%;
-        padding: 1px;
-    }
-    
-    nav img {
-        display: flex;
-        float: left;
-        padding: 5px;
-        height: 60px;
-        width: 200px;
+        height: 66px;
+        border-bottom: 2px solid #343535;
     }
     
     nav h1 {
         display: flex;
-        float: inline-start;
-        padding: 2px;
-        margin-top: 10px;
-        flex-direction: row;
+        align-items: center;
     }
     
     ul {
@@ -43,14 +32,20 @@
     
     nav ul {
         display: flex;
-        padding: 10px;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 15px;
     }
     
-    nav li {
-        margin: 0;
+    nav #logoRedirect {
+        text-decoration: none;
+        margin: 2px;
+        padding: 1px;
+        color: #fff;
+        transition: background-color 0.3s ease;
     }
     
-    nav a {
+    nav a:not(#logoRedirect) {
         text-decoration: none;
         color: #fff;
         padding: 10px;
@@ -59,6 +54,13 @@
     
     nav a:hover {
         background-color: #555;
+    }
+    
+    nav img {
+        margin: 0px;
+        padding: 0px;
+        height: 60px;
+        width: 200px;
     }
     
     #flightsList li {
