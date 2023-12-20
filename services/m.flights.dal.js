@@ -1,103 +1,102 @@
 const { ObjectId } = require("mongodb");
-const dal = require("./mdb");
+const mdb = require("./mdb");
 
-async function getActors() {
-  if(DEBUG) console.log("actors.mongo.dal.getActors()");
-  try {
-    await dal.connect();
-    const cursor = dal.db("Auth").collection("actor").find();
-    const results = await cursor.toArray();
-    return results;
-  } catch(error) {
-    console.log(error);
-  } finally {
-    dal.close();
-  }
-};
-async function getActorByActorId(id) {
-  if(DEBUG) console.log("actors.mongo.dal.getActorByActorId()");
-  try {
-    await dal.connect();
-    const database = dal.db("Auth");
-    const collection = database.collection("actor");
-    const result = await collection.find({ _id: new ObjectId(id) }).toArray();
-    if(DEBUG) console.log(result);
-    return result;
-  } catch(error) {
-    console.error('Error occurred while connecting to MongoDB:', error);
-    throw error;
-  } finally {
-    dal.close();
-  }
-};
-async function addActor(firstName, lastName) {
-  if(DEBUG) console.log("actors.mongo.dal.addActor()");
-  let newActor = JSON.parse(`{ "first_name": "` + firstName + `", "last_name": "` + lastName + `" }`);
-  if(DEBUG) console.log(newActor);
-  try {
-    await dal.connect();
-    const result = await dal.db("Auth").collection("actor").insertOne(newActor);
-    return result.insertedId;
-  } catch(error) {
-    console.log(error);
-    throw error;
-  } finally {
-    dal.close();
-  }
-};
 
-async function putActor(id, fname, lname) {
-  if(DEBUG) console.log("actors.mongo.dal.putActor()");
-  try {
-    await dal.connect();
-    const result = await dal.db("Auth").collection("actor")
-      .replaceOne({_id: new ObjectId(id)},
-        {first_name: fname, last_name: lname}
-        );
-    return result;
-  } catch(error) {
-    console.log(error);
-    throw error;
-  } finally {
-    dal.close();
-  }
-};
-async function patchActor(id, fname, lname) {
-  if(DEBUG) console.log("actors.mongo.dal.patchActor()");
-  try {
-    await dal.connect();
-    const result = await dal.db("Auth").collection("actor")
-      .updateOne({_id: new ObjectId(id)},
-        {$set: {first_name: fname, last_name: lname}},
-        {upsert: true, returnDocument: 'after'}
-        );
-    return result;
-  } catch(error) {
-    console.log(error);
-    throw error;
-  } finally {
-    dal.close();
-  }
-};
-async function deleteActor(id) {
-  if(DEBUG) console.log("actors.mongo.dal.deleteActor()");
-  try {
-    await dal.connect();
-    const result = await dal.db("Auth").collection("actor").deleteOne({ _id: new ObjectId(id) });
-    return result;
-  } catch(error) {
-    console.log(error);
-    throw error;
-  } finally {
-    dal.close();
-  }
-};
+async function getFlights() {
+    try {
+        const db = await mdb.connectToDatabase();
+        const cursor = db.collection("flights").find();
+        const results = await cursor.toArray();
+        return results;
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
+
+async function getFlightById(id) {
+    try {
+        const db = await mdb.connectToDatabase();
+        const result = await db.collection("flights").findOne({ _id: new ObjectId(id) });
+        return result ? [result] : [];
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
+
+async function searchFlights(query) {
+    try {
+        const db = await mdb.connectToDatabase();
+        const regex = new RegExp(query, 'i');
+        const results = await db.collection("flights").find({
+            $or: [
+                { flight_no: regex },
+                { arrival_airport: regex },
+                { status: regex },
+            ],
+        }).toArray();
+        return results;
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
+
+async function addFlight(flightNumber, destination, departureTime) {
+    try {
+        const db = await mdb.connectToDatabase();
+        const result = await db.collection("flights").insertOne({
+            flightNumber,
+            destination,
+            departureTime,
+        });
+        return result.insertedId;
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
+
+async function putFlight(id, flightNumber, destination, departureTime) {
+    try {
+        const db = await mdb.connectToDatabase();
+        const result = await db.collection("flights").replaceOne({ _id: new ObjectId(id) }, { flightNumber, destination, departureTime });
+        return result;
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
+
+async function patchFlight(id, flightNumber, destination, departureTime) {
+    try {
+        const db = await mdb.connectToDatabase();
+        const result = await db.collection("flights").updateOne({ _id: new ObjectId(id) }, { $set: { flightNumber, destination, departureTime } }, { upsert: true, returnDocument: 'after' });
+        return result;
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
+
+async function deleteFlight(id) {
+    try {
+        const db = await mdb.connectToDatabase();
+        const result = await db.collection("flights").deleteOne({ _id: new ObjectId(id) });
+        return result;
+    } catch (error) {
+        console.error('Error occurred while connecting to MongoDB:', error);
+        throw error;
+    }
+}
 
 module.exports = {
-    getActors,
-    getActorByActorId,
-    addActor,
-    putActor,
-    patchActor,
-    deleteActor,
-  }
+    getFlights,
+    getFlightById,
+    searchFlights,
+    addFlight,
+    putFlight,
+    patchFlight,
+    deleteFlight,
+};

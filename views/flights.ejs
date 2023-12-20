@@ -6,13 +6,19 @@
     <%- include('./partials/nav.ejs') %>
 
         <body>
+
             <div id="searchContainer">
                 <h1>List of Flights</h1>
                 <form id="searchForm">
                     <input type="text" name="query" id="searchInput" placeholder="Search flights">
                     <button type="submit">Search</button>
                 </form>
+                <select id="databaseSelector">
+            <option value="postgresql">PostgreSQL</option>
+            <option value="mongodb">MongoDB</option>
+</select>
             </div>
+
             <div id="flightsContainer" style="display: flex;">
                 <ul id="flightsList">
                 </ul>
@@ -22,16 +28,44 @@
             </div>
 
             <p id="noFlightsMessage" style="display: none;">No flights available.</p>
+            <div id="flightSearchHelper">
+                <h3>Help Menu</h3>
+                <ul>
+                    <p>This page presents a dataset of flight information for analysis and search purposes.</p>
+                    <p>Use the search bar to find specific flights by entering a flight number, destination airport code, or status.</p>
+                    <p>Click on a flight to view its detailed information.</p>
+                    <p>Choose between PostgreSQL or MongoDB as your database option to search from; your selection will dynamically update the displayed flights accordingly.</p>
+                    <p>For testing purposes with the sample data and database backups, try searching for "MONGOTEST" or "PGTEST" to ensure data retrieval from the correct database.</p>
+            </div>
 
             <a href="/flights">Back to Flights</a>
 
             <script>
                 async function fetchAndRenderFlights(query) {
+                    const selectedDatabase = document.getElementById('databaseSelector').value;
+
+
                     try {
-                        const response = await fetch(`/api/flights/search?query=${encodeURIComponent(query)}`);
-                        if (!response.ok) {
-                            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                        let response;
+
+
+                        if (selectedDatabase === 'mongodb') {
+                            response = await fetch(`/api/flights/search?db=mongodb&query=${encodeURIComponent(query)}`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`mongo response`, response);
+                            }
+
+                        } else if (selectedDatabase === 'postgresql') {
+                            response = await fetch(`/api/flights/search?db=postgresql&query=${encodeURIComponent(query)}`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`postgres response`, response);
+                            }
                         }
+
                         const results = await response.json();
 
                         const flightsList = document.getElementById('flightsList');
@@ -59,13 +93,32 @@
 
                 // Asynchronously fetch flight data after page load
                 async function fetchFlights() {
+                    const selectedDatabase = document.getElementById('databaseSelector').value;
+
                     try {
-                        const response = await fetch('/api/flights');
+                        let response;
+                        if (selectedDatabase === 'mongodb') {
+                            response = await fetch(`/api/flights?db=mongodb`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`mongo response`, response);
+                            }
+
+                        } else if (selectedDatabase === 'postgresql') {
+                            response = await fetch(`/api/flights?db=postgresql`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`postgres response`, response);
+                            }
+                        }
                         const flights = await response.json();
 
                         const flightsList = document.getElementById('flightsList');
                         const flightDetailsContainer = document.getElementById('flightDetails');
                         const noFlightsMessage = document.getElementById('noFlightsMessage');
+                        flightsList.innerHTML = '';
 
                         if (flights && flights.length > 0) {
                             flightsList.innerHTML = flights.map(flight => `
@@ -113,8 +166,8 @@
                     }
                 }
 
-                document.addEventListener('DOMContentLoaded', fetchFlights);
-                document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', fetchFlights);
+    document.addEventListener('DOMContentLoaded', () => {
     const flightDetailsContainer = document.getElementById('flightDetails');
     flightDetailsContainer.style.display = 'none';
 });
@@ -124,6 +177,13 @@ document.getElementById('searchForm').addEventListener('submit', function (event
     const query = document.getElementById('searchInput').value;
     fetchAndRenderFlights(query);
 });
+
+
+  document.getElementById('databaseSelector').addEventListener('change', function () {
+    const flightsList = document.getElementById('flightsList');
+    flightsList.innerHTML = '';
+    fetchFlights();
+  });
             </script>
 
         </body>

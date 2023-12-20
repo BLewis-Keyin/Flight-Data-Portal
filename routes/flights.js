@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const flightsDal = require('../services/pg.flights.dal');
+const flightsMongoDal = require('../services/m.flights.dal');
 
 DEBUG = false
 
@@ -15,17 +16,27 @@ const isAuthenticated = (req, res, next) => {
 
 router.get('/', isAuthenticated, async(req, res) => {
     try {
-        let flights = await flightsDal.getFlights();
-        // if (DEBUG) console.table(flights);
+        let flights;
+        if (req.query.db === 'mongodb') {
+            flights = await flightsMongoDal.getFlights();
+        } else {
+            flights = await flightsDal.getFlights();
+        }
         res.render('flights', { flights });
     } catch {
         res.render('503');
     }
 });
+
 router.get('/search', async(req, res) => {
     try {
         const query = req.query.query;
-        const results = await flightsDal.searchFlights(query);
+        let results;
+        if (req.query.db === 'mongodb') {
+            results = await flightsMongoDal.searchFlights(query);
+        } else {
+            results = await flightsDal.searchFlights(query);
+        }
         res.render('flightsSearch', { results, query });
     } catch {
         res.render('503');
@@ -34,7 +45,12 @@ router.get('/search', async(req, res) => {
 
 router.get('/:id', async(req, res) => {
     try {
-        const flight = await flightsDal.getFlightById(req.params.id);
+        let flight;
+        if (req.query.db === 'mongodb') {
+            flight = await flightsMongoDal.getFlightById(req.params.id);
+        } else {
+            flight = await flightsDal.getFlightById(req.params.id);
+        }
         if (DEBUG) console.log(`flights.router.get/:id ${flight}`);
         if (flight)
             res.render('flight', { flight });

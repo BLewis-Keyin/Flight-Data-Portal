@@ -1,9 +1,18 @@
 const { MongoClient } = require('mongodb');
+const uri = "mongodb://127.0.0.1:27017/";
+const pool = new MongoClient(uri);
 
-// const uri = "mongodb://127.0.0.1:27017/";
-const atlas = "mongodb+srv://peterrawsthorne:DsHwaloakVCgxc9Y@cluster0.4tdayfm.mongodb.net/"
-
-// const pool = new MongoClient(uri);
-const pool = new MongoClient(atlas);
-
-module.exports = pool;
+async function connectToDatabase() {
+    try {
+        await pool.connect();
+        console.log('Connected to the MongoDB database');
+        return pool.db("demo");
+    } catch (error) {
+        console.error('Error connecting to the MongoDB database:', error);
+        throw error;
+    }
+}
+module.exports = {
+    pool,
+    connectToDatabase,
+};

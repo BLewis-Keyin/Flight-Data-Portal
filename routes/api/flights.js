@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const flightsDal = require('../../services/pg.flights.dal');
+const flightsMongoDal = require('../../services/m.flights.dal');
 
 const DEBUG = true;
 // GET /api/flights
@@ -8,10 +9,15 @@ const DEBUG = true;
 router.get('/', async(req, res) => {
     if (DEBUG) console.log('ROUTE: /api/flights/GET ' + req.url);
     try {
-        let flights = await flightsDal.getFlights();
+        let flights;
+        if (req.query.db === 'mongodb') {
+            flights = await flightsMongoDal.getFlights();
+        } else {
+            flights = await flightsDal.getFlights();
+        }
         res.json(flights);
     } catch (error) {
-        console.error('Error fetching flights:', error); // Log the error
+        console.error('Error fetching flights:', error);
         res.status(503).json({ message: "Service Unavailable", status: 503 });
     }
 });
@@ -19,7 +25,12 @@ router.get('/', async(req, res) => {
 router.get('/search', async(req, res) => {
     try {
         const query = req.query.query;
-        const results = await flightsDal.searchFlights(query);
+        let results;
+        if (req.query.db === 'mongodb') {
+            results = await flightsMongoDal.searchFlights(query);
+        } else {
+            results = await flightsDal.searchFlights(query);
+        }
         res.status(200).json(results);
     } catch {
         res.render('503');

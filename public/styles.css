@@ -68,6 +68,22 @@
         width: 200px;
     }
     
+    #flightSearchHelper {
+        font-size: 12px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        right: 0;
+        top: 108px;
+        background-color: #2e2e2e;
+        border: 1px solid #3498db;
+        width: 200px;
+        margin: 10px;
+        padding: 10px;
+        overflow: hidden;
+    }
+    
     #footer {
         width: 100%;
         background-color: #343535;
@@ -101,6 +117,7 @@
     #flightsList {
         position: relative;
         top: 38px;
+        margin-right: 60%;
         margin-bottom: 40px;
     }
     
@@ -137,7 +154,8 @@
         min-width: 400px;
         max-width: 1200px;
         height: 600px;
-        margin-left: 5%;
+        margin-left: 30%;
+        margin-right: 30%;
         margin: 10px;
         padding: 10px;
     }
