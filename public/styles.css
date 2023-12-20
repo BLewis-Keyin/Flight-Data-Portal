@@ -4,6 +4,9 @@
         font-family: 'Arial Narrow Bold', sans-serif;
         overflow-x: hidden;
         margin-top: 68px;
+        margin-bottom: 0px;
+        position: relative;
+        min-height: 91vh;
     }
     /*sf*/
     
@@ -66,9 +69,13 @@
     }
     
     #footer {
+        width: 100%;
         background-color: #343535;
         color: #fff;
         text-align: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
     }
     
     #searchContainer {
@@ -93,8 +100,8 @@
     
     #flightsList {
         position: relative;
-        top: 100px;
-        margin-bottom: 200px;
+        top: 38px;
+        margin-bottom: 40px;
     }
     
     #flightsList li {
@@ -124,12 +131,12 @@
     #flightDetails {
         position: fixed;
         left: 25%;
-        top: 166px;
+        top: 106px;
         background-color: #2e2e2e;
         border: 1px solid #3498db;
         min-width: 400px;
         max-width: 1200px;
-        height: 400px;
+        height: 600px;
         margin-left: 5%;
         margin: 10px;
         padding: 10px;

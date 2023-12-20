@@ -3,6 +3,7 @@ const saltRounds = 10;
 
 const dal = require("./auth_db");
 const DEBUG = true;
+
 //get all logins.
 var getLogins = function() {
     if (DEBUG) console.log("logins.pg.dal.getLogins()");

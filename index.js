@@ -18,10 +18,17 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
-
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session && req.session.user;
+    next();
+});
 
 app.get('/', (req, res) => {
-    res.render('index.ejs', { name: 'Cassian Andor' });
+    res.render('index.ejs');
+});
+
+app.get('/notAuth', (request, response) => {
+    response.render('notAuth.ejs');
 });
 app.get('/about', (request, response) => {
     response.render('about.ejs');

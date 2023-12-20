@@ -5,7 +5,15 @@ const flightsDal = require('../services/pg.flights.dal');
 DEBUG = false
 
 
-router.get('/', async(req, res) => {
+const isAuthenticated = (req, res, next) => {
+    if (req.session && req.session.user) {
+        return next();
+    } else {
+        res.redirect('/notAuth');
+    }
+};
+
+router.get('/', isAuthenticated, async(req, res) => {
     try {
         let flights = await flightsDal.getFlights();
         // if (DEBUG) console.table(flights);

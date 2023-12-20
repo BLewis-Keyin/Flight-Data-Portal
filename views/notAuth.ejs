@@ -1,0 +1,15 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+            <center>
+                <div class="not auth content">
+                    <h3>You must be authenticated to use this service</h3>
+                    <a href="/login">Login</a>
+                </div>
+            </center>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+
+</html>
