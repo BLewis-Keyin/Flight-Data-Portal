@@ -13,6 +13,16 @@ Installation
     Start the application.
         node index.js
 
+Database Setup
+
+    The PostgreSQL databases are publicly accessible with the IP 24.137.80.247 on port 5434.
+    Database scripts and backup TAR files are available in Services/SQL.
+
+Access Information
+
+    Host: 24.137.80.247
+    Port: 5434
+
 Configuration
 
     Global Debugging Flags:
