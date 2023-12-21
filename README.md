@@ -1,7 +1,5 @@
 Flight Data Portal Documentation
 
-Overview
-
 The Flight Data Portal is a web application designed to manage and display flight information. It features user authentication, API endpoints for flight data, and a modular routing system. This documentation provides a brief overview and key information for developers working on or with the application.
 
 Installation
