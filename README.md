@@ -5,7 +5,7 @@ The Flight Data Portal is a web application designed to manage and display fligh
 Installation
 
     Clone the repository to your local machine.
-        git clone <repository_url>
+        git clone [<repository_url>](https://github.com/BLewis-Keyin/S3FinalSprint-FSDB)
 
     Install dependencies.
         npm install
