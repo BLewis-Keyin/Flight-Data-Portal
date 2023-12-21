@@ -15,7 +15,7 @@ Installation
 
 Database Setup
 
-    The PostgreSQL databases are publicly accessible with the IP 24.137.80.247 on port 5434.
+    The PostgreSQL databases are publicly accessible with default application parameters.
     Database scripts and backup TAR files are available in Services/SQL.
 
 Access Information
