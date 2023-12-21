@@ -55,6 +55,10 @@ Notable Milestones
      implement Logging and Debugging System
      https://github.com/BLewis-Keyin/S3FinalSprint-FSDB/commit/35c61273d2982a20fbff1f53119c86aad8cd65b7
 
+Known Issues
+
+     - global.DEBUG does not work, but setting all the other global.DEBUG variables to true effectively does the same thing.
+     - Editing a password will store it in the database unencrypted.
 
 
      
