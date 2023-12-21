@@ -160,6 +160,21 @@
         padding: 10px;
     }
     
+    #flightEditContainer {
+        position: fixed;
+        left: 55%;
+        top: 106px;
+        background-color: #2e2e2e;
+        border: 1px solid #3498db;
+        min-width: 400px;
+        max-width: 1200px;
+        height: 600px;
+        margin-left: 30%;
+        margin-right: 30%;
+        margin: 10px;
+        padding: 10px;
+    }
+    
     h2,
     h3 {
         color: #3498db;

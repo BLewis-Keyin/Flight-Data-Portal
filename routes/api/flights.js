@@ -63,7 +63,8 @@ router.post('/', async(req, res) => {
         await flightsDal.addFlight(req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.statusCode = 201;
         res.json({ message: "Created", status: 201 });
-    } catch {
+    } catch (error) {
+        console.error('Error: POST flight:', error)
         res.statusCode = 503;
         res.json({ message: "Service Unavailable", status: 503 });
     }
@@ -71,19 +72,20 @@ router.post('/', async(req, res) => {
 
 // PUT /api/flights/:id
 router.put('/:id', async(req, res) => {
+    console.log('Request Body:', req.body);
     if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/flights PUT ' + req.params.id);
     try {
-        await flightsDal.putFlight(req.params.id, req.body.flightNumber, req.body.destination, req.body.departureTime);
-        res.statusCode = 200;
-        res.json({ message: "OK", status: 200 });
-    } catch {
-        res.statusCode = 503;
-        res.json({ message: "Service Unavailable", status: 503 });
+        await flightsDal.putFlight(req.body.flightNumber, req.body.arrivalAirport, req.body.departureAirport, req.body.departureTime, req.body.arrivalTime, req.body.status, req.body.aircraftCode, req.body.flightId);
+        res.status(200).json({ message: "OK", status: 200 });
+    } catch (error) {
+        console.error('Error PUT flight:', error);
+        res.status(503).json({ message: "Service Unavailable", status: 503 });
     }
 });
 
 // PATCH /api/flights/:id
 router.patch('/:id', async(req, res) => {
+
     if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/flights PATCH ' + req.params.id);
     try {
         await flightsDal.patchFlight(req.params.id, req.body.flightNumber, req.body.destination, req.body.departureTime);

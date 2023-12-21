@@ -1,7 +1,7 @@
 global.DEBUG = false // All Global Debugging Messages
 
-global.ROUTE_DEBUG = false // Debugging messages for routes only
-global.DAL_DEBUG = false // Debugging messages for DAL only
+global.ROUTE_DEBUG = true // Debugging messages for routes only
+global.DAL_DEBUG = true // Debugging messages for DAL only
 global.LOG_DEBUG = true // Debugging messages for log only
 
 const DEBUG = false // Debugging messages for this file only
@@ -16,6 +16,7 @@ const imagesPath = path.join(__dirname, 'images');
 const { logActivity } = require('./services/log');
 
 app.set('view engine', 'ejs');
+app.use(express.json());
 app.use(express.static('public'));
 app.use('/images', express.static(imagesPath));
 app.use(express.urlencoded({ extended: true, }));

@@ -16,7 +16,7 @@
                 <select id="databaseSelector">
             <option value="postgresql">PostgreSQL</option>
             <option value="mongodb">MongoDB</option>
-</select>
+                </select>
             </div>
 
             <div id="flightsContainer" style="display: flex;">
@@ -37,18 +37,47 @@
                     <p>Choose between PostgreSQL or MongoDB as your database option to search from; your selection will dynamically update the displayed flights accordingly.</p>
                     <p>For testing purposes with the sample data and database backups, try searching for "MONGOTEST" or "PGTEST" to ensure data retrieval from the correct database.</p>
             </div>
+            <div id="flightEditContainer" style="display: none;">
+                <h3>Edit Flight</h3>
+                <form id="flightEditForm">
+
+
+                    <input type="hidden" id="flightId" name="flightId" value="">
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status">
+
+                    <label for="flightNumber">Flight Number:</label>
+                    <input type="text" id="flightNumber" name="flightNumber">
+
+                    <label for="arrivalAirport">Arrival Airport Code:</label>
+                    <input type="text" id="arrivalAirport" name="arrivalAirport">
+
+                    <label for="departureAirport">Departure Airport Code:</label>
+                    <input type="text" id="departureAirport" name="departureAirport">
+
+                    <label for="arrivalTime">Arrival Time:</label>
+                    <input type="text" id="arrivalTime" name="arrivalTime">
+
+                    <label for="departureTime">Departure Time:</label>
+                    <input type="text" id="departureTime" name="departureTime">
+
+                    <label for="aircraftCode">Aircraft Code:</label>
+                    <input type="text" id="aircraftCode" name="aircraftCode">
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+
 
             <a href="/flights">Back to Flights</a>
+
 
             <script>
                 async function fetchAndRenderFlights(query) {
                     const selectedDatabase = document.getElementById('databaseSelector').value;
-
-
                     try {
                         let response;
-
-
                         if (selectedDatabase === 'mongodb') {
                             response = await fetch(`/api/flights/search?db=mongodb&query=${encodeURIComponent(query)}`);
                             if (!response.ok) {
@@ -68,6 +97,8 @@
 
                         const results = await response.json();
 
+                        results.sort((a, b) => a.flight_id - b.flight_id);
+
                         const flightsList = document.getElementById('flightsList');
                         const noFlightsMessage = document.getElementById('noFlightsMessage');
 
@@ -80,6 +111,8 @@
                         <br>
                         <strong>Status:</strong> ${flight.status}<br>
                         <button type="button" onclick="showFlightDetails('${flight.flight_id}')">Show Details</button>
+                        ${flightDetails.status === "On Time" ? `<li><strong>Status:</strong> <span style="color: lightgreen;">${flightDetails.status}</span></li>` : ''}
+                        ${flightDetails.status === "Delayed" ? `<li><strong>Status:</strong> <span style="color: red;">${flightDetails.status}</span></li>` : ''}
                     </li>
                 `).join('');
                         } else {
@@ -89,8 +122,8 @@
                         console.error('Error fetching flights:', error);
                     }
                 }
-
-
+   
+              
                 // Asynchronously fetch flight data after page load
                 async function fetchFlights() {
                     const selectedDatabase = document.getElementById('databaseSelector').value;
@@ -149,13 +182,21 @@
                         flightDetailsContainer.innerHTML = `
                     <h2>Flight Details</h2>
                     <ul>
+                        <li><strong>Flight ID:</strong> ${flightDetails.flight_id}</li>
                         <li><strong>Flight Number:</strong> ${flightDetails.flight_no}</li>
                         <li><strong>Destination:</strong> ${flightDetails.arrival_airport}</li>
+                        <li><strong>Departure Airport:</strong> ${flightDetails.departure_airport}</li>
+                        <li><strong>Arrival Time:</strong> ${flightDetails.scheduled_arrival}</li>
                         <li><strong>Departure Time:</strong> ${flightDetails.scheduled_departure}</li>
+                        <li><strong>Aircraft Code:</strong> ${flightDetails.aircraft_code}</li>
                          ${flightDetails.status === "Arrived" ? `<li><strong>Status:</strong> <span style="color: green;">${flightDetails.status}</span></li>` : ''}
                          ${flightDetails.status === "Scheduled" ? `<li><strong>Status:</strong> <span style="color: yellow;">${flightDetails.status}</span></li>` : ''}
                          ${flightDetails.status === "On Time" ? `<li><strong>Status:</strong> <span style="color: lightgreen;">${flightDetails.status}</span></li>` : ''}
                          ${flightDetails.status === "Delayed" ? `<li><strong>Status:</strong> <span style="color: red;">${flightDetails.status}</span></li>` : ''}
+
+                         <button type="button" onclick="showEditForm('${flightDetails.flight_id}')">Update</button>
+                            <button type="button" onclick="deleteFlight('${flightDetails.flight_id}')">Delete</button>
+                         
                          
             </ul>
         `;
@@ -163,6 +204,99 @@
 
                     } catch (error) {
                         console.error('Error fetching flight details:', error);
+                    }
+                }
+
+        async function showEditForm(flightId) {
+        const flightEditContainer = document.getElementById('flightEditContainer');
+        const flightEditForm = document.getElementById('flightEditForm');
+        const response = await fetch(`/api/flights/${flightId}`);
+        const flightDetails = await response.json();
+            document.getElementById('flightId').value = flightDetails.flight_id;
+            document.getElementById('status').value = flightDetails.status;
+            document.getElementById('flightNumber').value = flightDetails.flight_no;
+            document.getElementById('arrivalAirport').value = flightDetails.arrival_airport;
+            document.getElementById('departureAirport').value = flightDetails.departure_airport;
+            document.getElementById('departureTime').value = flightDetails.scheduled_departure;
+            document.getElementById('arrivalTime').value = flightDetails.scheduled_arrival;
+            document.getElementById('aircraftCode').value = flightDetails.aircraft_code;
+
+            flightEditContainer.style.display = 'block';
+                }
+
+
+
+
+        async function updateFlight(flightNumber, arrivalAirport, departureAirport, departureTime, arrivalTime, status, aircraftCode, flightId) {
+        try {
+        const selectedDatabase = document.getElementById('databaseSelector').value;
+
+        const updateData = {
+        flightNumber: flightNumber,
+        arrivalAirport: arrivalAirport,
+        departureAirport: departureAirport,
+        departureTime: departureTime, 
+        arrivalTime: arrivalTime, 
+        status: status, 
+        aircraftCode: aircraftCode, 
+        flightId: flightId,
+        };
+
+        console.log('Update Data:', updateData);
+
+        let response;
+
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
+        };
+
+        if (selectedDatabase === 'mongodb') {
+            response = await fetch(`/api/flights/${flightId}?db=mongodb`, requestOptions);
+        } else if (selectedDatabase === 'postgresql') {
+            response = await fetch(`/api/flights/${flightId}?db=postgresql`, requestOptions);
+        }
+
+        if (!response.ok) {
+            console.error(`Error: ${response.status} - ${response.statusText}`);
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        console.log('Flight updated successfully!');
+    } catch (error) {
+        console.error('Error updating flight:', error);
+    }
+}
+
+
+
+
+            // Function to delete a flight
+        async function deleteFlight(flightId) {
+            let response;
+            const selectedDatabase = document.getElementById('databaseSelector').value;
+            if (selectedDatabase === 'mongodb') {
+                response = await fetch(`/api/flights/${flightId}?db=mongodb`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            } else if (selectedDatabase === 'postgresql') {
+            response = await fetch(`/api/flights/${flightId}?db=postgresql`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json', 
+                    },
+                 });
+
+             } try {
+                        console.log('Deleting flight:', flightId);
+                    } catch (error) {
+                        console.error('Error deleting flight:', error);
                     }
                 }
 
@@ -183,7 +317,34 @@ document.getElementById('searchForm').addEventListener('submit', function (event
     const flightsList = document.getElementById('flightsList');
     flightsList.innerHTML = '';
     fetchFlights();
-  });
+});
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const flightDetailsContainer = document.getElementById('flightDetails');
+    const flightEditContainer = document.getElementById('flightEditContainer'); 
+    const flightEditForm = document.getElementById('flightEditForm');
+    const flightsList = document.getElementById('flightsList');
+
+    flightEditForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const flightNumber = document.getElementById('flightNumber').value;
+        const arrivalAirport = document.getElementById('arrivalAirport').value;
+        const departureAirport = document.getElementById('departureAirport').value;
+        const departureTime = document.getElementById('departureTime').value;
+        const arrivalTime = document.getElementById('arrivalTime').value;
+        const status = document.getElementById('status').value;
+        const aircraftCode = document.getElementById('aircraftCode').value;
+        const flightId = document.getElementById('flightId').value;
+
+        await updateFlight(flightNumber, arrivalAirport, departureAirport, departureTime, arrivalTime, status, aircraftCode, flightId);
+
+        flightDetailsContainer.style.display = 'none';
+        flightEditContainer.style.display = 'none';
+        flightsList.innerHTML = '';
+        fetchFlights();
+    });
+});
             </script>
 
         </body>

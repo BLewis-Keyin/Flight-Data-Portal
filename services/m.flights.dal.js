@@ -49,7 +49,7 @@ async function searchFlights(query) {
 }
 
 async function addFlight(flightNumber, destination, departureTime) {
-    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: addFlight()');
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log("DAL: addFlight()");
     try {
         const db = await mdb.connectToDatabase();
         const result = await db.collection("flights").insertOne({
