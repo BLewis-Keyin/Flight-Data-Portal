@@ -1,4 +1,9 @@
-global.DEBUG = false;
+global.DEBUG = false // All Global Debugging Messages (This doesn't work and I have no idea why)
+global.ROUTE_DEBUG = true // Debugging messages for routes only
+global.DAL_DEBUG = true // Debugging messages for DAL only
+global.LOG_DEBUG = true // Debugging messages for log only
+
+const DEBUG = false // Debugging messages for this file only
 
 const express = require('express');
 const methodOverride = require('method-override');
@@ -7,6 +12,7 @@ const app = express();
 const PORT = 3000;
 const path = require('path');
 const imagesPath = path.join(__dirname, 'images');
+const { logActivity } = require('./services/log');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -24,27 +30,50 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+    logActivity(req, 'Accessed /');
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: / GET ' + req.url);
     res.render('index.ejs');
 });
 
-app.get('/notAuth', (request, response) => {
+app.get('/notAuth', (req, response) => {
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /notAuth GET ' + req.url);
+    logActivity(req, 'Accessed /notAuth');
     response.render('notAuth.ejs');
 });
-app.get('/about', (request, response) => {
+app.get('/about', (req, response) => {
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /about GET ' + req.url);
+    logActivity(req, 'Accessed /about');
     response.render('about.ejs');
 });
 
 const flightsRouter = require('./routes/flights')
-app.use('/flights', flightsRouter);
+if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('flightsRouter: ', flightsRouter);
+app.use('/flights', (req, res, next) => {
+    logActivity(req, 'Accessed /flights');
+    flightsRouter(req, res, next);
+});
 
-const loginsRouter = require('./routes/logins')
-app.use('/logins', loginsRouter);
+const loginsRouter = require('./routes/logins');
+if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('loginsRouter: ', loginsRouter);
+app.use('/logins', (req, res, next) => {
+    logActivity(req, 'Accessed /logins');
+    loginsRouter(req, res, next);
+});
 
-const loginRouter = require('./routes/login')
-app.use('/login', loginRouter);
+
+const loginRouter = require('./routes/login');
+if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('loginRouter: ', loginRouter);
+app.use('/login', (req, res, next) => {
+    logActivity(req, 'Accessed /login');
+    loginRouter(req, res, next);
+});
 
 const dashboardRouter = require('./routes/dashboard');
-app.use('/dashboard', dashboardRouter);
+if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('dashboardRouter: ', dashboardRouter);
+app.use('/dashboard', (req, res, next) => {
+    logActivity(req, 'Accessed /dashboard');
+    dashboardRouter(req, res, next);
+});
 
 
 // anything beginning with "/api" will go into this
@@ -59,5 +88,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Simple app running on port ${PORT}.`)
+    console.log(`Flight Data Portal running on port ${PORT}.`)
 });

@@ -15,6 +15,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 router.get('/', isAuthenticated, async(req, res) => {
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /flights GET');
     try {
         let flights;
         if (req.query.db === 'mongodb') {
@@ -30,6 +31,7 @@ router.get('/', isAuthenticated, async(req, res) => {
 
 router.get('/search', async(req, res) => {
     try {
+        if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /flights/search GET');
         const query = req.query.query;
         let results;
         if (req.query.db === 'mongodb') {
@@ -44,6 +46,7 @@ router.get('/search', async(req, res) => {
 });
 
 router.get('/:id', async(req, res) => {
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /flights/:id GET');
     try {
         let flight;
         if (req.query.db === 'mongodb') {
@@ -63,7 +66,7 @@ router.get('/:id', async(req, res) => {
 
 
 router.post('/', async(req, res) => {
-    if (DEBUG) console.log("flights.POST");
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log("flights.POST");
     try {
         await flightsDal.addFlight(req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.redirect('/flights/');
@@ -73,7 +76,7 @@ router.post('/', async(req, res) => {
 });
 
 router.put('/:id', async(req, res) => {
-    if (DEBUG) console.log('flights.PUT: ' + req.params.id);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('flights.PUT: ' + req.params.id);
     try {
         await flightsDal.putFlight(req.params.id, req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.redirect('/flights/');
@@ -83,7 +86,7 @@ router.put('/:id', async(req, res) => {
 });
 
 router.patch('/:id', async(req, res) => {
-    if (DEBUG) console.log('flights.PATCH: ' + req.params.id);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('flights.PATCH: ' + req.params.id);
     try {
         await flightsDal.patchFlight(req.params.id, req.body.flightNumber, req.body.destination, req.body.departureTime);
         res.redirect('/flights/');
@@ -93,12 +96,12 @@ router.patch('/:id', async(req, res) => {
 });
 
 router.delete('/:id', async(req, res) => {
-    if (DEBUG) console.log('flights.DELETE: ' + req.params.id);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('flights.DELETE: ' + req.params.id);
     try {
         await flightsDal.deleteFlight(req.params.id);
         res.redirect('/flights/');
     } catch (err) {
-        if (DEBUG) console.error(err);
+        if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.error(err);
         res.render('503');
     }
 });

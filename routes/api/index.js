@@ -1,6 +1,6 @@
 var router = require('express').Router();
-
-if (DEBUG) {
+const DEBUG = false;
+if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) {
     console.log('ROUTE: /api/flights');
     console.log('ROUTE: /api/logins');
     console.log('ROUTE: /api/full');

@@ -1,8 +1,11 @@
 const { ObjectId } = require("mongodb");
 const mdb = require("./mdb");
 
+const DEBUG = false;
+
 
 async function getFlights() {
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: getFlights()');
     try {
         const db = await mdb.connectToDatabase();
         const cursor = db.collection("flights").find();
@@ -15,6 +18,7 @@ async function getFlights() {
 }
 
 async function getFlightById(id) {
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: getFlightById()');
     try {
         const db = await mdb.connectToDatabase();
         const result = await db.collection("flights").findOne({ _id: new ObjectId(id) });
@@ -26,6 +30,7 @@ async function getFlightById(id) {
 }
 
 async function searchFlights(query) {
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: searchFlights()');
     try {
         const db = await mdb.connectToDatabase();
         const regex = new RegExp(query, 'i');
@@ -44,6 +49,7 @@ async function searchFlights(query) {
 }
 
 async function addFlight(flightNumber, destination, departureTime) {
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: addFlight()');
     try {
         const db = await mdb.connectToDatabase();
         const result = await db.collection("flights").insertOne({
@@ -59,6 +65,7 @@ async function addFlight(flightNumber, destination, departureTime) {
 }
 
 async function putFlight(id, flightNumber, destination, departureTime) {
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: putFlight()');
     try {
         const db = await mdb.connectToDatabase();
         const result = await db.collection("flights").replaceOne({ _id: new ObjectId(id) }, { flightNumber, destination, departureTime });
@@ -70,6 +77,7 @@ async function putFlight(id, flightNumber, destination, departureTime) {
 }
 
 async function patchFlight(id, flightNumber, destination, departureTime) {
+    if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: patchFlight()');
     try {
         const db = await mdb.connectToDatabase();
         const result = await db.collection("flights").updateOne({ _id: new ObjectId(id) }, { $set: { flightNumber, destination, departureTime } }, { upsert: true, returnDocument: 'after' });
@@ -82,6 +90,7 @@ async function patchFlight(id, flightNumber, destination, departureTime) {
 
 async function deleteFlight(id) {
     try {
+        if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: deleteFlight()');
         const db = await mdb.connectToDatabase();
         const result = await db.collection("flights").deleteOne({ _id: new ObjectId(id) });
         return result;

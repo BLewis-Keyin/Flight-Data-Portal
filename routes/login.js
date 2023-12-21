@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const loginsDal = require('../services/pg.logins.dal')
 const bcrypt = require('bcrypt');
-DEBUG = true;
+
+const DEBUG = false;
+
 router.get('/', async(req, res) => {
 
     try {
         let theLogins = await loginsDal.getLogins();
-        if (DEBUG) console.table(theLogins);
+        if (DEBUG || global.ROUTE_DEBUG || global.DEBUG) console.table(theLogins);
         res.render('login.ejs');
     } catch {
         res.render('503');
@@ -15,6 +17,7 @@ router.get('/', async(req, res) => {
 });
 
 router.post('/', async(req, res) => {
+    if (DEBUG || global.ROUTE_DEBUG || global.DEBUG) console.log("login.POST");
     const username = req.body.username;
     const password = req.body.password;
     try {

@@ -2,9 +2,11 @@ var router = require('express').Router();
 const loginsDal = require('../../services/pg.logins.dal')
 const bcrypt = require('bcrypt');
 
+const DEBUG = false;
+
 // api/logins
 router.get('/', async(req, res) => {
-    if (DEBUG) console.log('ROUTE: /api/logins/ GET ' + req.url);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/logins/ GET ' + req.url);
     try {
         let theLogins = await loginsDal.getLogins();
         res.json(theLogins);
@@ -16,7 +18,7 @@ router.get('/', async(req, res) => {
 });
 // api/logins/:id
 router.get('/:id', async(req, res) => {
-    if (DEBUG) console.log('ROUTE: /api/logins/:id GET ' + req.url);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/logins/:id GET ' + req.url);
     try {
         let aLogin = await loginsDal.getLoginByLoginId(req.params.id);
         if (aLogin.length === 0) {
@@ -32,7 +34,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 router.post('/', async(req, res) => {
-    if (DEBUG) {
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) {
         console.log('ROUTE: /api/logins/ POST');
         //    console.log(req);
     }
@@ -47,7 +49,7 @@ router.post('/', async(req, res) => {
     }
 });
 router.patch('/:id', async(req, res) => {
-    if (DEBUG) console.log('ROUTE: /api/logins PATCH ' + req.params.id);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/logins PATCH ' + req.params.id);
     try {
         await loginsDal.patchLogin(req.params.id, req.body.username, req.body.password);
         res.statusCode = 200;
@@ -59,7 +61,7 @@ router.patch('/:id', async(req, res) => {
     }
 });
 router.delete('/:id', async(req, res) => {
-    if (DEBUG) console.log('ROUTE: /api/logins DELETE ' + req.params.id);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/logins DELETE ' + req.params.id);
     try {
         await loginsDal.deleteLogin(req.params.id);
         res.statusCode = 200;
@@ -74,6 +76,7 @@ router.delete('/:id', async(req, res) => {
 
 
 router.post('/login', async(req, res) => {
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/logins/login POST ' + req.url);
     const { username, password } = req.body;
 
     try {
