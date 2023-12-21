@@ -1,6 +1,7 @@
-global.DEBUG = false // All Global Debugging Messages (This doesn't work and I have no idea why)
-global.ROUTE_DEBUG = true // Debugging messages for routes only
-global.DAL_DEBUG = true // Debugging messages for DAL only
+global.DEBUG = false // All Global Debugging Messages
+
+global.ROUTE_DEBUG = false // Debugging messages for routes only
+global.DAL_DEBUG = false // Debugging messages for DAL only
 global.LOG_DEBUG = true // Debugging messages for log only
 
 const DEBUG = false // Debugging messages for this file only
@@ -17,8 +18,8 @@ const { logActivity } = require('./services/log');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use('/images', express.static(imagesPath));
-app.use(express.urlencoded({ extended: true, })); // This is important!
-app.use(methodOverride('_method')); // So is this!
+app.use(express.urlencoded({ extended: true, }));
+app.use(methodOverride('_method'));
 app.use(session({
     secret: 'pgd9LHU4k1Su2ZI9Odpfg8rCe0305sMu',
     resave: false,
