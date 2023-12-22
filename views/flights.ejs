@@ -83,55 +83,53 @@
                     <br>
                     <strong>Status:</strong> ${flight.status}<br>
                     <button type="button" onclick="showFlightDetails('${flight.flight_id}')">Show Details</button>
-                    ${flight.status === "On Time" ? `<li><strong>Status:</strong> <span style="color: lightgreen;">${flight.status}</span></li>` : ''}
-                    ${flight.status === "Delayed" ? `<li><strong>Status:</strong> <span style="color: red;">${flight.status}</span></li>` : ''}
                     </li>
                     `).join('');
-                    } else {
-                    noFlightsMessage.style.display = 'block';
-                    }
+                        } else {
+                            noFlightsMessage.style.display = 'block';
+                        }
                     } catch (error) {
-                    console.error('Error fetching flights:', error);
+                        console.error('Error fetching flights:', error);
                     }
-                    }
+                }
 
 
-// Asynchronously fetch flight data after page load
-async function fetchFlights() {
-    const selectedDatabase = document.getElementById('databaseSelector').value;
+                // Asynchronously fetch flight data after page load
+                async function fetchFlights() {
+                    const selectedDatabase = document.getElementById('databaseSelector').value;
 
-    try {
-        let response;
-        if (selectedDatabase === 'mongodb') {
-            response = await fetch(`/api/flights?db=mongodb`);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            } else {
-                console.log(`mongo response`, response);
-            }
+                    try {
+                        let response;
+                        if (selectedDatabase === 'mongodb') {
+                            response = await fetch(`/api/flights?db=mongodb`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`mongo response`, response);
+                            }
 
-        } else if (selectedDatabase === 'postgresql') {
-            response = await fetch(`/api/flights?db=postgresql`);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            } else {
-                console.log(`postgres response`, response);
-            }
-        }
-        const flights = await response.json();
+                        } else if (selectedDatabase === 'postgresql') {
+                            response = await fetch(`/api/flights?db=postgresql`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`postgres response`, response);
+                            }
+                        }
+                        const flights = await response.json();
 
-        const flightsList = document.getElementById('flightsList');
-        const flightDetailsContainer = document.getElementById('flightDetailsContainer');
-        const flightEditContainer = document.getElementById('flightEditContainer');
-        const noFlightsMessage = document.getElementById('noFlightsMessage');
+                        const flightsList = document.getElementById('flightsList');
+                        const flightDetailsContainer = document.getElementById('flightDetailsContainer');
+                        const flightEditContainer = document.getElementById('flightEditContainer');
+                        const noFlightsMessage = document.getElementById('noFlightsMessage');
 
-        flightsList.innerHTML = '';
-        flightDetailsContainer.style.display = 'none';
-        flightEditContainer.style.display = 'none';
+                        flightsList.innerHTML = '';
+                        flightDetailsContainer.style.display = 'none';
+                        flightEditContainer.style.display = 'none';
 
 
-        if (flights && flights.length > 0) {
-            flightsList.innerHTML = flights.map(flight => `
+                        if (flights && flights.length > 0) {
+                            flightsList.innerHTML = flights.map(flight => `
         <li>
             <strong>Flight Number:</strong> ${flight.flight_no}<br>
             <strong>Destination:</strong> ${flight.arrival_airport}<br>
@@ -141,42 +139,42 @@ async function fetchFlights() {
             <button type="button" onclick="showFlightDetails('${flight.flight_id}')">Show Details</button>
         </li>
     `).join('');
-        } else {
-            noFlightsMessage.style.display = 'block';
-        }
-    } catch (error) {
-        console.error('Error fetching flights:', error);
-    }
-}
+                        } else {
+                            noFlightsMessage.style.display = 'block';
+                        }
+                    } catch (error) {
+                        console.error('Error fetching flights:', error);
+                    }
+                }
 
 
-// Function to fetch and display flight details
-async function showFlightDetails(flightId) {
-    const selectedDatabase = document.getElementById('databaseSelector').value;
-    try {
-        let response;
-        if (selectedDatabase === 'mongodb') {
-            response = await fetch(`/api/flights/${flightId}?db=mongodb`);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            } else {
-                console.log(`mongo response`, response);
-            }
+                // Function to fetch and display flight details
+                async function showFlightDetails(flightId) {
+                    const selectedDatabase = document.getElementById('databaseSelector').value;
+                    try {
+                        let response;
+                        if (selectedDatabase === 'mongodb') {
+                            response = await fetch(`/api/flights/${flightId}?db=mongodb`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`mongo response`, response);
+                            }
 
-        } else if (selectedDatabase === 'postgresql') {
-            response = await fetch(`/api/flights/${flightId}?db=postgresql`);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            } else {
-                console.log(`postgres response`, response);
-            }
-        }
-        const flightDetails = await response.json();
-        console.log('Flight Details:', flightDetails);
+                        } else if (selectedDatabase === 'postgresql') {
+                            response = await fetch(`/api/flights/${flightId}?db=postgresql`);
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                            } else {
+                                console.log(`postgres response`, response);
+                            }
+                        }
+                        const flightDetails = await response.json();
+                        console.log('Flight Details:', flightDetails);
 
 
-        const flightDetailsContainer = document.getElementById('flightDetailsContainer');
-        flightDetailsContainer.innerHTML = `
+                        const flightDetailsContainer = document.getElementById('flightDetailsContainer');
+                        flightDetailsContainer.innerHTML = `
         <h2>Flight Details</h2>
         <ul>
             <li><strong>Flight ID:</strong> ${flightDetails.flight_id}</li>
