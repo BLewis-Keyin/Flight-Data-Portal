@@ -68,22 +68,6 @@
         width: 200px;
     }
     
-    #flightSearchHelper {
-        font-size: 12px;
-        font-weight: bold;
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        right: 0;
-        top: 108px;
-        background-color: #2e2e2e;
-        border: 1px solid #3498db;
-        width: 200px;
-        margin: 10px;
-        padding: 10px;
-        overflow: hidden;
-    }
-    
     #footer {
         width: 100%;
         background-color: #343535;
@@ -145,9 +129,9 @@
         background-color: #2980b9;
     }
     
-    #flightDetails {
+    #flightDetailsContainer,
+    #flightEditContainer {
         position: fixed;
-        left: 25%;
         top: 106px;
         background-color: #2e2e2e;
         border: 1px solid #3498db;
@@ -161,18 +145,27 @@
     }
     
     #flightEditContainer {
+        left: 830px;
+    }
+    
+    #flightDetailsContainer {
+        left: 380px;
+    }
+    
+    #flightSearchHelper {
+        font-size: 12px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
         position: fixed;
-        left: 55%;
-        top: 106px;
+        right: 0;
+        top: 108px;
         background-color: #2e2e2e;
         border: 1px solid #3498db;
-        min-width: 400px;
-        max-width: 1200px;
-        height: 600px;
-        margin-left: 30%;
-        margin-right: 30%;
+        width: 200px;
         margin: 10px;
         padding: 10px;
+        overflow: hidden;
     }
     
     h2,

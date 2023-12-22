@@ -41,16 +41,18 @@ router.get('/search', async(req, res) => {
 router.get('/:id', async(req, res) => {
     if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/flights/:id GET ' + req.url);
     try {
-        let flight = await flightsDal.getFlightById(req.params.id);
-        if (flight.length === 0) {
-            res.statusCode = 404;
-            res.json({ message: "Not Found", status: 404 });
+        let flight;
+        if (req.query.db === 'mongodb') {
+            flight = await flightsMongoDal.getFlightById(req.params.id);
         } else {
-            res.json(flight);
+            flight = await flightsDal.getFlightById(req.params.id);
         }
-    } catch {
+        res.json(flight);
+
+    } catch (error) {
         res.statusCode = 503;
         res.json({ message: "Service Unavailable", status: 503 });
+        console.error('Error fetching flight details:', error);
     }
 });
 
@@ -72,14 +74,38 @@ router.post('/', async(req, res) => {
 
 // PUT /api/flights/:id
 router.put('/:id', async(req, res) => {
-    console.log('Request Body:', req.body);
-    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/flights PUT ' + req.params.id);
+    if (global.DEBUG || global.ROUTE_DEBUG || DEBUG) console.log('ROUTE: /api/flights PUT ' + req.params.id), console.log('Request Body:', req.body);
     try {
-        await flightsDal.putFlight(req.body.flightNumber, req.body.arrivalAirport, req.body.departureAirport, req.body.departureTime, req.body.arrivalTime, req.body.status, req.body.aircraftCode, req.body.flightId);
-        res.status(200).json({ message: "OK", status: 200 });
+        const selectedDatabase = req.query.db
+
+        if (selectedDatabase === 'mongodb') {
+            await flightsMongoDal.putFlight(
+                req.body.flightNumber,
+                req.body.arrivalAirport,
+                req.body.departureAirport,
+                req.body.departureTime,
+                req.body.arrivalTime,
+                req.body.status,
+                req.body.aircraftCode,
+                req.body.flightId
+            );
+        } else {
+            await flightsDal.putFlight(
+                req.body.flightNumber,
+                req.body.arrivalAirport,
+                req.body.departureAirport,
+                req.body.departureTime,
+                req.body.arrivalTime,
+                req.body.status,
+                req.body.aircraftCode,
+                req.body.flightId
+            );
+        }
+
+        res.status(200).json({ message: 'OK', status: 200 });
     } catch (error) {
         console.error('Error PUT flight:', error);
-        res.status(503).json({ message: "Service Unavailable", status: 503 });
+        res.status(503).json({ message: 'Service Unavailable', status: 503 });
     }
 });
 

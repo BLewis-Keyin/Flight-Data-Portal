@@ -21,14 +21,13 @@ async function getFlightById(id) {
     if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: getFlightById()');
     try {
         const db = await mdb.connectToDatabase();
-        const result = await db.collection("flights").findOne({ _id: new ObjectId(id) });
-        return result ? [result] : [];
+        const result = await db.collection("flights").findOne({ flight_id: parseInt(id) });
+        return result || null;
     } catch (error) {
         console.error('Error occurred while connecting to MongoDB:', error);
         throw error;
     }
 }
-
 async function searchFlights(query) {
     if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: searchFlights()');
     try {
@@ -64,12 +63,22 @@ async function addFlight(flightNumber, destination, departureTime) {
     }
 }
 
-async function putFlight(id, flightNumber, destination, departureTime) {
+async function putFlight(flightNumber, arrivalAirport, departureAirport, departureTime, arrivalTime, status, aircraftCode, flightId) {
     if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: putFlight()');
     try {
         const db = await mdb.connectToDatabase();
-        const result = await db.collection("flights").replaceOne({ _id: new ObjectId(id) }, { flightNumber, destination, departureTime });
-        return result;
+        const result = await db.collection('flights').updateOne({ flight_id: parseInt(flightId) }, {
+            $set: {
+                flight_no: flightNumber,
+                arrival_airport: arrivalAirport,
+                departure_airport: departureAirport,
+                scheduled_departure: departureTime,
+                scheduled_arrival: arrivalTime,
+                status: status,
+                aircraft_code: aircraftCode
+            }
+        });
+        return result.modifiedCount;
     } catch (error) {
         console.error('Error occurred while connecting to MongoDB:', error);
         throw error;
@@ -92,7 +101,7 @@ async function deleteFlight(id) {
     try {
         if (global.DEBUG || global.DAL_DEBUG || DEBUG) console.log('DAL: deleteFlight()');
         const db = await mdb.connectToDatabase();
-        const result = await db.collection("flights").deleteOne({ _id: new ObjectId(id) });
+        const result = await db.collection("flights").deleteOne({ flightId: parseInt(id) });
         return result;
     } catch (error) {
         console.error('Error occurred while connecting to MongoDB:', error);
